@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VeloWorld — Premium bikes from the world's best brands. Road, mountain, electric & city bikes with expert advice and free shipping over €500.">
+  <meta name="theme-color" content="#F97316">
+  <title>VeloWorld — Premium Bike Store</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23F97316'/><text y='.9em' font-size='70' x='14'>🚴</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#/" class="logo">
+        <div class="logo-icon">🚴</div>
+        Velo<span>World</span>
+      </a>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="search" class="search-input" id="globalSearch" placeholder="Search bikes, brands..." aria-label="Search bikes" autocomplete="off">
+        <div class="search-dropdown" id="searchDropdown"></div>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#/" class="nav-link">Home</a>
+        <a href="#/shop" class="nav-link">Shop</a>
+        <a href="#/quiz" class="nav-link">Bike Finder</a>
+        <a href="#/about" class="nav-link">About</a>
+        <a href="#/stores" class="nav-link">Stores</a>
+        <a href="#/blog" class="nav-link">Blog</a>
+        <a href="#/faq" class="nav-link">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <select class="form-input" style="padding:0.4rem 0.6rem;font-size:0.8rem;border-radius:8px;width:auto;background:var(--gray-100);border-color:var(--border);" onchange="changeCurrency(this.value)" aria-label="Currency">
+          <option value="EUR">€ EUR</option>
+          <option value="USD">$ USD</option>
+          <option value="GBP">£ GBP</option>
+        </select>
+        <button class="icon-btn" id="themeToggle" onclick="Store.toggleTheme()" title="Toggle dark/light mode" aria-label="Toggle theme">🌙</button>
+        <button class="icon-btn" onclick="Router.go('#/wishlist')" title="Wishlist" aria-label="Wishlist">♡</button>
+        <button class="icon-btn" onclick="Router.go('#/compare')" title="Compare bikes" aria-label="Compare">⇌</button>
+        <button class="icon-btn" onclick="Router.go('#/cart')" title="Shopping cart" aria-label="Cart">
+          🛒
+          <span class="cart-badge" style="display:none">0</span>
+        </button>
+        <button class="burger" id="burgerBtn" aria-label="Open menu" onclick="openMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-menu-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div class="logo"><div class="logo-icon">🚴</div>Velo<span>World</span></div>
+        <button onclick="closeMobileMenu()" style="font-size:1.5rem;color:var(--text-muted);background:none;border:none;cursor:pointer;">×</button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="#/" class="mobile-nav-link" onclick="closeMobileMenu()">🏠 Home</a>
+        <a href="#/shop" class="mobile-nav-link" onclick="closeMobileMenu()">🚴 Shop All Bikes</a>
+        <a href="#/quiz" class="mobile-nav-link" onclick="closeMobileMenu()">🎯 Bike Finder Quiz</a>
+        <a href="#/wishlist" class="mobile-nav-link" onclick="closeMobileMenu()">♡ Wishlist</a>
+        <a href="#/compare" class="mobile-nav-link" onclick="closeMobileMenu()">⇌ Compare</a>
+        <a href="#/cart" class="mobile-nav-link" onclick="closeMobileMenu()">🛒 Cart</a>
+        <a href="#/about" class="mobile-nav-link" onclick="closeMobileMenu()">ℹ About Us</a>
+        <a href="#/stores" class="mobile-nav-link" onclick="closeMobileMenu()">📍 Store Locator</a>
+        <a href="#/blog" class="mobile-nav-link" onclick="closeMobileMenu()">📰 Blog</a>
+        <a href="#/faq" class="mobile-nav-link" onclick="closeMobileMenu()">❓ FAQ</a>
+        <a href="#/contact" class="mobile-nav-link" onclick="closeMobileMenu()">✉️ Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="app" role="main">
+    <div style="display:flex;align-items:center;justify-content:center;min-height:60vh;flex-direction:column;gap:1rem;">
+      <div class="spinner"></div>
+      <p style="color:var(--text-muted);">Loading VeloWorld...</p>
+    </div>
+  </main>
+
+  <div class="compare-bar" id="compareBar">
+    <span style="font-weight:600;font-size:0.85rem;">Compare</span>
+    <span class="compare-count" style="color:rgba(255,255,255,0.6);font-size:0.8rem;">0/3 bikes</span>
+    <div class="compare-items" style="display:flex;flex-wrap:wrap;gap:0.5rem;flex:1;"></div>
+    <div style="display:flex;gap:0.75rem;">
+      <button class="btn btn-primary btn-sm" onclick="Router.go('#/compare')">Compare Now →</button>
+      <button onclick="Store.clearComparison()" style="color:rgba(255,255,255,0.6);font-size:0.85rem;cursor:pointer;background:none;border:none;">Clear</button>
+    </div>
+  </div>
+
+  <div class="newsletter-popup" id="newsletterPopup" role="dialog" aria-label="Newsletter signup">
+    <button class="newsletter-popup-close" onclick="dismissNewsletter()" aria-label="Close">×</button>
+    <div style="font-size:2rem;margin-bottom:0.5rem;">🚴</div>
+    <h4>Get 10% Off Your First Order!</h4>
+    <p>Join 12,000+ cyclists and get exclusive deals, new arrivals, and riding tips.</p>
+    <div class="newsletter-form">
+      <input type="email" class="form-input" id="nlEmail" placeholder="your@email.com" aria-label="Email address">
+      <button class="btn btn-primary btn-full" onclick="subscribeNewsletter()">Get My 10% Discount →</button>
+      <button onclick="dismissNewsletter()" style="font-size:0.8rem;color:var(--text-muted);text-align:center;cursor:pointer;background:none;border:none;margin-top:0.25rem;">No thanks, I'll pay full price</button>
+    </div>
+  </div>
+
+  <button class="back-top" id="backTop" onclick="scrollTop()" aria-label="Back to top" title="Back to top">↑</button>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color:#fff;margin-bottom:0.75rem;"><div class="logo-icon">🚴</div>Velo<span>World</span></div>
+          <p>The Netherlands' premier online bike store. Premium bikes, expert advice, and unbeatable service since 2010.</p>
+          <div class="footer-social">
+            <button class="social-btn" title="Instagram" onclick="Toast.show('Follow us @VeloWorld 📸','info')">📷</button>
+            <button class="social-btn" title="Facebook" onclick="Toast.show('Like us on Facebook 👍','info')">👥</button>
+            <button class="social-btn" title="YouTube" onclick="Toast.show('Subscribe for riding tips 📺','info')">▶️</button>
+            <button class="social-btn" title="Strava" onclick="Toast.show('Join our Strava club! 🏅','info')">🏅</button>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <p style="font-size:0.8rem;margin-bottom:0.5rem;opacity:0.7;">Subscribe for exclusive deals:</p>
+            <div style="display:flex;gap:0.5rem;">
+              <input type="email" placeholder="your@email.com" style="flex:1;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:0.85rem;" id="footerEmail">
+              <button class="btn btn-primary btn-sm" onclick="subscribeFooter()">Go</button>
+            </div>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <div class="footer-links">
+            <a href="#/shop?cat=road">Road Bikes</a>
+            <a href="#/shop?cat=mountain">Mountain Bikes</a>
+            <a href="#/shop?cat=electric">Electric Bikes</a>
+            <a href="#/shop?cat=city">City Bikes</a>
+            <a href="#/shop?cat=kids">Kids Bikes</a>
+            <a href="#/quiz">Bike Finder Quiz</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Info</h4>
+          <div class="footer-links">
+            <a href="#/about">About Us</a>
+            <a href="#/stores">Store Locator</a>
+            <a href="#/blog">Blog</a>
+            <a href="#/faq">FAQ</a>
+            <a href="#/contact">Contact</a>
+            <a href="#/compare">Compare Bikes</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Service</h4>
+          <div class="footer-links">
+            <a href="#/faq">Returns</a>
+            <a href="#/faq">Assembly</a>
+            <a href="#/faq">Financing</a>
+            <a href="#/faq">Warranty</a>
+            <a href="#/contact">Track My Order</a>
+            <a href="#/contact">Bike Servicing</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 VeloWorld B.V. · All rights reserved · <a href="#">Privacy Policy</a> · <a href="#">Terms</a></div>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <span style="font-size:0.75rem;opacity:0.5;">Secure payments:</span>
+          <div class="payment-icons">💳 🏦 📱 🅿 🌸</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    function openMobileMenu() {
+      document.getElementById('mobileMenu').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function subscribeFooter() {
+      const email = document.getElementById('footerEmail').value.trim();
+      if (!email || !email.includes('@')) { Toast.show('Enter a valid email', 'warning'); return; }
+      Toast.show('Subscribed! Check your inbox for 10% off 🎉', 'success');
+      document.getElementById('footerEmail').value = '';
+    }
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash || '#/';
+      document.querySelectorAll('.nav-link').forEach(a => {
+        const href = a.getAttribute('href');
+        a.classList.toggle('active', hash === href || (href !== '#/' && hash.startsWith(href)));
+      });
+    });
+    window.dispatchEvent(new Event('hashchange'));
+  </script>
+</body>
+</html>
